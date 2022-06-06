@@ -1,10 +1,26 @@
 <template>
   <q-page class="flex flex-center page-wrapper">
-    <apexchart type="pie" width="380" :options="chartOptions" :series="series" />
+    <q-select v-model="currentMonth" :options="otherMonths" dense borderless />
+    <div v-if="renderChart">
+      <apexchart
+        v-if="!isChart"
+        type="pie"
+        width="380"
+        :options="chartOptionsFull"
+        :series="series"
+      />
+      <apexchart
+        v-if="isChart"
+        type="pie"
+        width="380"
+        :options="chartOptionsEmpty"
+        :series="series"
+      />
+    </div>
     <div class="column">
       <div class="q-mb-md q-mt-md">
         <q-banner rounded class="bg-light-blue-9 text-white text-center banner-wrapper">
-          Баланс 60 грн
+          Баланс {{ balance }} грн
         </q-banner>
       </div>
       <div class="row">
@@ -20,12 +36,33 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'MainPage',
   data() {
     return {
-      series: [60, 40],
-      chartOptions: {
+      renderChart: true,
+      isChart: true,
+      currentMonth: (function () {
+        let currentMonth = new Date().toLocaleString('ru-RU', { month: 'long' })
+        currentMonth = currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1)
+        return currentMonth
+      })(),
+      otherMonths: [
+        'Январь',
+        'Февраль',
+        'Март',
+        'Апрель',
+        'Май',
+        'Июнь',
+        'Июль',
+        'Август',
+        'Сентябрь',
+        'Октябрь',
+        'Ноябрь',
+        'Декабрь',
+      ],
+      chartOptionsFull: {
         chart: {
           width: 380,
           type: 'pie',
@@ -40,7 +77,7 @@ export default {
         labels: ['Расход', 'Доход'],
         dataLabels: {
           formatter: function (val, opts) {
-            return val + ' грн'
+            return opts.w.config.series[opts.seriesIndex] + ' грн'
           },
         },
         responsive: [
@@ -54,7 +91,95 @@ export default {
           },
         ],
       },
+      chartOptionsEmpty: {
+        chart: {
+          width: 380,
+          type: 'pie',
+        },
+        legend: {
+          show: false,
+        },
+        colors: ['#b0bec5', '#90a4ae'],
+        responsive: [
+          {
+            breakpoint: 250,
+            options: {
+              chart: {
+                width: 350,
+              },
+            },
+          },
+        ],
+      },
     }
+  },
+  computed: {
+    ...mapGetters('storeBudgetPlan', ['getIncomeSum', 'getConsumptionSum']),
+    series() {
+      let monthNum = 0
+      switch (this.currentMonth) {
+        case 'Январь':
+          monthNum = 0
+          break
+        case 'Февраль':
+          monthNum = 1
+          break
+        case 'Март':
+          monthNum = 2
+          break
+        case 'Апрель':
+          monthNum = 3
+          break
+        case 'Май':
+          monthNum = 4
+          break
+        case 'Июнь':
+          monthNum = 5
+          break
+        case 'Июль':
+          monthNum = 6
+          break
+        case 'Август':
+          monthNum = 7
+          break
+        case 'Сентябрь':
+          monthNum = 8
+          break
+        case 'Октябрь':
+          monthNum = 9
+          break
+        case 'Ноябрь':
+          monthNum = 10
+          break
+        case 'Декабрь':
+          monthNum = 11
+          break
+      }
+      let income = this.getIncomeSum(monthNum)
+      let consumption = this.getConsumptionSum(monthNum)
+      if (income === 0 && consumption === 0) {
+        this.$nextTick(() => {
+          this.isChart = true
+        })
+        return [50, 50]
+      } else {
+        this.$nextTick(() => {
+          this.isChart = false
+        })
+        return [income, consumption]
+      }
+    },
+    balance() {
+      return this.series[0] - this.series[1]
+    },
+  },
+  watch: {
+    currentMonth() {
+      this.renderChart = false
+      this.$nextTick(() => {
+        this.renderChart = true
+      })
+    },
   },
 }
 </script>
