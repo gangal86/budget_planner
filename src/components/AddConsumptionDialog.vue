@@ -1,25 +1,25 @@
 <template>
-  <q-dialog v-model="isAddIncomeDialog">
+  <q-dialog v-model="isAddСonsumptionDialog">
     <q-card>
       <q-card-section class="q-pb-none">
-        <div class="text-h6 q-px-sm">Новый доход</div>
+        <div class="text-h6 q-px-sm">Новый расход</div>
       </q-card-section>
       <q-card-section>
         <div class="q-px-sm">
-          <q-form class="q-gutter-md" @submit="addIncome" @reset="resetForm">
+          <q-form class="q-gutter-md" @submit="addConsumption" @reset="resetForm">
             <q-input
               outlined
-              v-model="incomeValue"
-              label="Доход"
+              v-model="consumptionValue"
+              label="Расход"
               lazy-rules
               type="number"
-              :rules="[(val) => (val && val.length > 0) || 'Введите доход']"
+              :rules="[(val) => (val && val.length > 0) || 'Введите расход']"
             />
 
             <q-select
               outlined
-              v-model="incomeCategory"
-              :options="incomeCategoriesAll"
+              v-model="consumptionCategory"
+              :options="consumptionCategoriesAll"
               label="Категория"
               :rules="[(val) => (val && val.length > 0) || 'Введите категорию']"
             />
@@ -38,7 +38,7 @@
 import { mapActions } from 'vuex'
 import { uid } from 'quasar'
 export default {
-  name: 'AddIncomeDialog',
+  name: 'AddConsumptionDialog',
   props: {
     renderChart: {
       type: Boolean,
@@ -51,13 +51,13 @@ export default {
   },
   data() {
     return {
-      incomeValue: '',
-      incomeCategory: 'Зарплата',
-      incomeCategoriesAll: ['Зарплата', 'Депозит', 'Прочие доходы'],
+      consumptionValue: '',
+      consumptionCategory: 'Здоровье',
+      consumptionCategoriesAll: ['Здоровье', 'Жилье', 'Продукты'],
     }
   },
   computed: {
-    isAddIncomeDialog: {
+    isAddСonsumptionDialog: {
       get() {
         return this.modelValue
       },
@@ -67,12 +67,12 @@ export default {
     },
   },
   methods: {
-    ...mapActions('storeBudgetPlan', ['addIncomeAction']),
-    addIncome() {
-      this.addIncomeAction({
+    ...mapActions('storeBudgetPlan', ['addСonsumptionAction']),
+    addConsumption() {
+      this.addСonsumptionAction({
         id: uid(),
-        incomeValue: parseFloat(this.incomeValue),
-        incomeCategory: this.incomeCategory,
+        consumptionValue: parseFloat(this.consumptionValue),
+        consumptionCategory: this.consumptionCategory,
         date: new Date().getTime(),
       })
       this.$emit('update:renderChart', false)
@@ -82,8 +82,8 @@ export default {
       this.resetForm()
     },
     resetForm() {
-      this.incomeValue = ''
-      this.isAddIncomeDialog = false
+      this.consumptionValue = ''
+      this.isAddСonsumptionDialog = false
     },
   },
 }

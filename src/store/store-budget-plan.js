@@ -67,11 +67,17 @@ const mutations = {
   addIncomeMutation(state, payload) {
     state.budgetPlan.push(payload)
   },
+  addСonsumptionMutation(state, payload) {
+    state.budgetPlan.push(payload)
+  },
 }
 
 const actions = {
   addIncomeAction({ commit }, payload) {
     commit('addIncomeMutation', payload)
+  },
+  addСonsumptionAction({ commit }, payload) {
+    commit('addСonsumptionMutation', payload)
   },
 }
 

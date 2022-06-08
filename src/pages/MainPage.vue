@@ -25,7 +25,12 @@
       </div>
       <div class="row">
         <q-page-sticky position="bottom-right" :offset="[18, 18]">
-          <q-btn fab icon="remove" color="pink-13" />
+          <q-btn
+            @click="isAddConsumptionDialog = !isAddConsumptionDialog"
+            fab
+            icon="remove"
+            color="pink-13"
+          />
         </q-page-sticky>
         <q-page-sticky position="bottom-left" :offset="[18, 18]">
           <q-btn
@@ -42,22 +47,31 @@
       :renderChart="renderChart"
       @update:renderChart="renderChart = $event"
     />
+    <AddConsumptionDialog
+      v-model="isAddConsumptionDialog"
+      :renderChart="renderChart"
+      @update:renderChart="renderChart = $event"
+    />
   </q-page>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import AddIncomeDialog from '../components/AddIncomeDialog'
+import AddConsumptionDialog from '../components/AddConsumptionDialog'
+
 export default {
   name: 'MainPage',
   components: {
     AddIncomeDialog,
+    AddConsumptionDialog,
   },
   data() {
     return {
       renderChart: true,
       isChart: true,
       isAddIncomeDialog: false,
+      isAddConsumptionDialog: false,
       currentMonth: (function () {
         let currentMonth = new Date().toLocaleString('ru-RU', { month: 'long' })
         currentMonth = currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1)
