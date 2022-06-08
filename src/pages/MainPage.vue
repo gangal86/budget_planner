@@ -28,21 +28,36 @@
           <q-btn fab icon="remove" color="pink-13" />
         </q-page-sticky>
         <q-page-sticky position="bottom-left" :offset="[18, 18]">
-          <q-btn fab icon="add" color="teal-5" />
+          <q-btn
+            @click="isAddIncomeDialog = !isAddIncomeDialog"
+            fab
+            icon="add"
+            color="teal-5"
+          />
         </q-page-sticky>
       </div>
     </div>
+    <AddIncomeDialog
+      v-model="isAddIncomeDialog"
+      :renderChart="renderChart"
+      @update:renderChart="renderChart = $event"
+    />
   </q-page>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import AddIncomeDialog from '../components/AddIncomeDialog'
 export default {
   name: 'MainPage',
+  components: {
+    AddIncomeDialog,
+  },
   data() {
     return {
       renderChart: true,
       isChart: true,
+      isAddIncomeDialog: false,
       currentMonth: (function () {
         let currentMonth = new Date().toLocaleString('ru-RU', { month: 'long' })
         currentMonth = currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1)

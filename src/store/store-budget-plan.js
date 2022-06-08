@@ -63,21 +63,27 @@ const state = () => ({
   ],
 })
 
-const mutations = {}
+const mutations = {
+  addIncomeMutation(state, payload) {
+    state.budgetPlan.push(payload)
+  },
+}
 
-const actions = {}
+const actions = {
+  addIncomeAction({ commit }, payload) {
+    commit('addIncomeMutation', payload)
+  },
+}
 
 const getters = {
   getIncomeSum: (state) => (monthNum) => {
     return state.budgetPlan
-      .filter((item) => new Date(item.date).getMonth() === monthNum)
-      .filter((item) => item.incomeValue !== undefined)
+      .filter((item) => new Date(item.date).getMonth() === monthNum && item.incomeValue !== undefined)
       .reduce((sum, item) => sum + item.incomeValue, 0)
   },
   getConsumptionSum: (state) => (monthNum) => {
     return state.budgetPlan
-      .filter((item) => new Date(item.date).getMonth() === monthNum)
-      .filter((item) => item.consumptionValue !== undefined)
+      .filter((item) => new Date(item.date).getMonth() === monthNum && item.consumptionValue !== undefined)
       .reduce((sum, item) => sum + item.consumptionValue, 0)
   },
 }
