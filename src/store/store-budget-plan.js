@@ -1,4 +1,15 @@
 const state = () => ({
+  currency: '$',
+  incomeCategories: [
+    { id: 'ID1', title: 'Зарплата' },
+    { id: 'ID2', title: 'Депозит' },
+    { id: 'ID3', title: 'Сбережения' },
+  ],
+  consumptionCategories: [
+    { id: 'ID1', title: 'Здоровье' },
+    { id: 'ID2', title: 'Кафе' },
+    { id: 'ID3', title: 'Жилье' },
+  ],
   budgetPlan: [
     {
       id: 'ID1',
@@ -70,6 +81,15 @@ const mutations = {
   addСonsumptionMutation(state, payload) {
     state.budgetPlan.push(payload)
   },
+  addIncomeCategoryMutation(state, payload) {
+    state.incomeCategories.push(payload)
+  },
+  addConsumptionCategoryMutation(state, payload) {
+    state.consumptionCategories.push(payload)
+  },
+  addCurrencyMutation(state, payload) {
+    state.currency = payload
+  }
 }
 
 const actions = {
@@ -79,6 +99,15 @@ const actions = {
   addСonsumptionAction({ commit }, payload) {
     commit('addСonsumptionMutation', payload)
   },
+  addIncomeCategoryAction({ commit }, payload) {
+    commit('addIncomeCategoryMutation', payload)
+  },
+  addConsumptionCategoryAction({ commit }, payload) {
+    commit('addConsumptionCategoryMutation', payload)
+  },
+  addCurrencyAction({ commit }, payload) {
+    commit('addCurrencyMutation', payload)
+  }
 }
 
 const getters = {
@@ -91,6 +120,15 @@ const getters = {
     return state.budgetPlan
       .filter((item) => new Date(item.date).getMonth() === monthNum && item.consumptionValue !== undefined)
       .reduce((sum, item) => sum + item.consumptionValue, 0)
+  },
+  getIncomeCategories(state) {
+    return state.incomeCategories
+  },
+  getСonsumptionCategories(state) {
+    return state.consumptionCategories
+  },
+  getCurrency(state) {
+    return state.currency
   },
 }
 
