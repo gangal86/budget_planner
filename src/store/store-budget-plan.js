@@ -1,8 +1,10 @@
 import { LocalStorage } from 'quasar'
 
+const currencyDefault = '$'
+
 const state = () => ({
   //currency: '$',
-  currency: LocalStorage.has('currency') ? LocalStorage.getItem('currency') : '$',
+  currency: LocalStorage.has('currency') ? LocalStorage.getItem('currency') : currencyDefault,
   // incomeCategories: [
   //   { id: 'ID1', title: 'Зарплата', default: true },
   //   { id: 'ID2', title: 'Депозиты', default: true },
@@ -137,6 +139,16 @@ const mutations = {
     state.currency = payload
     LocalStorage.set('currency', state.currency)
   },
+  deleteDataMutation(state) {
+    state.budgetPlan = []
+    state.currency = currencyDefault
+    state.incomeCategories = state.incomeCategories.filter((item) => item.default === true)
+    state.consumptionCategories = state.consumptionCategories.filter((item) => item.default === true)
+    LocalStorage.set('budgetPlan', state.budgetPlan)
+    LocalStorage.set('currency', state.currency)
+    LocalStorage.set('incomeCategories', state.incomeCategories)
+    LocalStorage.set('consumptionCategories', state.consumptionCategories)
+  },
 }
 
 const actions = {
@@ -154,6 +166,9 @@ const actions = {
   },
   addCurrencyAction({ commit }, payload) {
     commit('addCurrencyMutation', payload)
+  },
+  deleteDataAction({ commit }) {
+    commit('deleteDataMutation')
   },
 }
 

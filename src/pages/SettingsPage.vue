@@ -43,8 +43,17 @@
           </q-card-section>
         </q-card>
         <q-card class="q-px-sm q-mb-md" flat bordered>
-          <q-card-section class="row q-gutter-sm items-center">
+          <q-card-section class="row q-gutter-sm items-center q-pb-sm">
             <q-input v-model="currency" color="primary" outline label="Валюта" />
+          </q-card-section>
+          <q-card-section>
+            <q-btn
+              @click="deleteData"
+              class="q-my-sm"
+              color="red"
+              label="удалить данные"
+              rounded
+            />
           </q-card-section>
         </q-card>
       </q-card-section>
@@ -156,6 +165,21 @@ export default {
     resetFormConsumptionCategory() {
       this.сonsumptionCategory = ''
       this.isAddConsumptionCategoryDialog = false
+    },
+    deleteData() {
+      this.$q
+        .dialog({
+          title: 'Удалить данные',
+          message: 'Это действие необратимо',
+          cancel: {
+            flat: true,
+            label: 'отмена',
+          },
+          persistent: true,
+        })
+        .onOk(() => {
+          this.$store.dispatch('storeBudgetPlan/deleteDataAction')
+        })
     },
   },
 }

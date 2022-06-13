@@ -20,7 +20,7 @@
     <div class="column">
       <div class="q-mb-md q-mt-md">
         <q-banner rounded class="bg-yellow-10 text-white text-center banner-wrapper">
-          Баланс {{ balance }} грн
+          Баланс {{ balance }} {{ getCurrency }}
         </q-banner>
       </div>
       <div class="row">
