@@ -1,16 +1,19 @@
 <template>
-  <q-page class="flex flex-center page-wrapper">
+  <q-page
+    class="flex flex-center page-wrapper"
+    :class="{ 'balance-details': !isHideCharts }"
+  >
     <q-select v-model="currentMonth" :options="otherMonths" dense borderless />
     <div v-if="renderChart">
       <apexchart
-        v-if="!isChart"
+        v-if="!isChart && isHideCharts"
         type="pie"
         width="400"
         :options="chartOptionsFull"
         :series="series"
       />
       <apexchart
-        v-if="isChart"
+        v-if="isChart && isHideCharts"
         type="pie"
         width="370"
         :options="chartOptionsEmpty"
@@ -18,7 +21,7 @@
       />
     </div>
     <div class="column">
-      <div class="q-mb-md q-mt-md">
+      <div @click="showBalanceDetails" class="q-mb-md q-mt-md">
         <q-banner rounded class="bg-yellow-10 text-white text-center banner-wrapper">
           Баланс {{ balance }} {{ getCurrency }}
         </q-banner>
@@ -70,6 +73,7 @@ export default {
     return {
       renderChart: true,
       isChart: true,
+      isHideCharts: true,
       isAddIncomeDialog: false,
       isAddConsumptionDialog: false,
       currentMonth: (function () {
@@ -206,6 +210,11 @@ export default {
       })
     },
   },
+  methods: {
+    showBalanceDetails() {
+      this.isHideCharts = !this.isHideCharts
+    },
+  },
 }
 </script>
 
@@ -216,6 +225,11 @@ export default {
   width: 100%;
   max-width: 400px;
   min-width: 250px;
+}
+
+.balance-details {
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .fixed-bottom-left {
@@ -243,5 +257,11 @@ export default {
   max-width: 200px;
   margin: 0 auto;
   width: 100%;
+}
+.q-select {
+  max-width: 80px;
+  width: 100%;
+  margin: 0 auto;
+  padding-top: 10px;
 }
 </style>
