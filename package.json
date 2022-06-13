@@ -1,7 +1,7 @@
 {
   "name": "budget_planner",
   "version": "1.0.0",
-  "description": "Budget Planner",
+  "description": "Budget Planner - application for personal finance management",
   "productName": "Budget Planner",
   "author": "Roman Gangal https://gangal.pro",
   "private": true,

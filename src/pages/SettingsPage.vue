@@ -1,7 +1,10 @@
 <template>
-  <div class="column q-pa-md">
+  <div class="column q-pa-md card-wrapper">
     <q-card flat bordered>
-      <q-card-section class="q-pb-none">
+      <q-card-section class="row items-center q-pb-none">
+        <router-link style="text-decoration: none; color: inherit" to="/">
+          <q-icon name="arrow_back" size="24px" color="primary" />
+        </router-link>
         <div class="text-h6 q-px-sm">Настройки</div>
       </q-card-section>
       <q-card-section>
@@ -157,3 +160,12 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.card-wrapper {
+  width: 100%;
+  max-width: 400px;
+  min-width: 250px;
+  margin: 0 auto;
+}
+</style>

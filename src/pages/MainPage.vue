@@ -5,21 +5,21 @@
       <apexchart
         v-if="!isChart"
         type="pie"
-        width="380"
+        width="400"
         :options="chartOptionsFull"
         :series="series"
       />
       <apexchart
         v-if="isChart"
         type="pie"
-        width="380"
+        width="370"
         :options="chartOptionsEmpty"
         :series="series"
       />
     </div>
     <div class="column">
       <div class="q-mb-md q-mt-md">
-        <q-banner rounded class="bg-light-blue-9 text-white text-center banner-wrapper">
+        <q-banner rounded class="bg-orange-8 text-white text-center banner-wrapper">
           Баланс {{ balance }} грн
         </q-banner>
       </div>
@@ -92,10 +92,6 @@ export default {
         'Декабрь',
       ],
       chartOptionsFull: {
-        chart: {
-          width: 380,
-          type: 'pie',
-        },
         legend: {
           position: 'bottom',
           markers: {
@@ -111,27 +107,23 @@ export default {
         },
         responsive: [
           {
-            breakpoint: 250,
+            breakpoint: 270,
             options: {
               chart: {
-                width: 350,
+                width: 380,
               },
             },
           },
         ],
       },
       chartOptionsEmpty: {
-        chart: {
-          width: 380,
-          type: 'pie',
-        },
         legend: {
           show: false,
         },
         colors: ['#b0bec5', '#90a4ae'],
         responsive: [
           {
-            breakpoint: 250,
+            breakpoint: 270,
             options: {
               chart: {
                 width: 350,
@@ -219,7 +211,7 @@ export default {
   margin: 0 auto;
   width: 100%;
   max-width: 400px;
-  min-width: 300px;
+  min-width: 250px;
 }
 
 .fixed-bottom-left {
@@ -228,6 +220,9 @@ export default {
   @media (max-width: 370px) {
     min-width: 110px;
   }
+  @media (max-width: 290px) {
+    min-width: 90px;
+  }
 }
 
 .fixed-bottom-right {
@@ -235,6 +230,9 @@ export default {
   min-width: 150px;
   @media (max-width: 370px) {
     min-width: 110px;
+  }
+  @media (max-width: 290px) {
+    min-width: 90px;
   }
 }
 .banner-wrapper {
