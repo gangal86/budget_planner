@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { uid } from 'quasar'
 export default {
   name: 'AddIncomeDialog',
@@ -53,10 +53,12 @@ export default {
     return {
       incomeValue: '',
       incomeCategory: 'Зарплата',
-      incomeCategoriesAll: ['Зарплата', 'Депозит', 'Прочие доходы'],
     }
   },
   computed: {
+    ...mapGetters({
+      incomeCategoriesAll: 'storeBudgetPlan/getIncomeCategories',
+    }),
     isAddIncomeDialog: {
       get() {
         return this.modelValue

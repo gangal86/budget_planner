@@ -19,7 +19,7 @@
     </div>
     <div class="column">
       <div class="q-mb-md q-mt-md">
-        <q-banner rounded class="bg-orange-8 text-white text-center banner-wrapper">
+        <q-banner rounded class="bg-yellow-10 text-white text-center banner-wrapper">
           Баланс {{ balance }} грн
         </q-banner>
       </div>
@@ -101,8 +101,8 @@ export default {
         colors: ['#26a69a', '#f50057'],
         labels: ['Расход', 'Доход'],
         dataLabels: {
-          formatter: function (val, opts) {
-            return opts.w.config.series[opts.seriesIndex] + ' грн'
+          formatter: (val, opts) => {
+            return opts.w.config.series[opts.seriesIndex] + ' ' + this.getCurrency
           },
         },
         responsive: [
@@ -135,7 +135,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('storeBudgetPlan', ['getIncomeSum', 'getConsumptionSum']),
+    ...mapGetters('storeBudgetPlan', [
+      'getIncomeSum',
+      'getConsumptionSum',
+      'getCurrency',
+    ]),
     series() {
       let monthNum = 0
       switch (this.currentMonth) {

@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { uid } from 'quasar'
 export default {
   name: 'AddConsumptionDialog',
@@ -53,10 +53,12 @@ export default {
     return {
       consumptionValue: '',
       consumptionCategory: 'Здоровье',
-      consumptionCategoriesAll: ['Здоровье', 'Жилье', 'Продукты'],
     }
   },
   computed: {
+    ...mapGetters({
+      consumptionCategoriesAll: 'storeBudgetPlan/getСonsumptionCategories',
+    }),
     isAddСonsumptionDialog: {
       get() {
         return this.modelValue

@@ -13,7 +13,7 @@
             <div class="q-px-sm">Категории дохода</div>
           </q-card-section>
           <q-card-section class="row q-gutter-sm items-center">
-            <div v-for="{ id, title } in getIncomeCategories" :key="id">
+            <div v-for="{ id, title } in getIncomeCategoriesSettings" :key="id">
               <q-chip color="primary" outline> {{ title }} </q-chip>
             </div>
             <q-btn
@@ -30,7 +30,7 @@
             <div class="q-px-sm">Категории расхода</div>
           </q-card-section>
           <q-card-section class="row q-gutter-sm items-center">
-            <div v-for="{ id, title } in getСonsumptionCategories" :key="id">
+            <div v-for="{ id, title } in getСonsumptionCategoriesSettings" :key="id">
               <q-chip color="primary" outline> {{ title }} </q-chip>
             </div>
             <q-btn
@@ -121,8 +121,8 @@ export default {
   },
   computed: {
     ...mapGetters('storeBudgetPlan', [
-      'getIncomeCategories',
-      'getСonsumptionCategories',
+      'getIncomeCategoriesSettings',
+      'getСonsumptionCategoriesSettings',
       'getCurrency',
     ]),
     currency: {
