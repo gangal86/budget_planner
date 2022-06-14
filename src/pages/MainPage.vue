@@ -1,126 +1,139 @@
 <template>
-  <q-page
-    class="flex flex-center page-wrapper"
-    :class="{ 'balance-details': !isHideCharts }"
-  >
-    <q-select v-model="currentMonth" :options="otherMonths" dense borderless />
-    <div v-if="renderChart">
-      <apexchart
-        v-if="!isChart && isHideCharts"
-        type="pie"
-        width="400"
-        :options="chartOptionsFull"
-        :series="series"
-      />
-      <apexchart
-        v-if="isChart && isHideCharts"
-        type="pie"
-        width="370"
-        :options="chartOptionsEmpty"
-        :series="series"
-      />
-    </div>
-    <div class="column">
-      <div @click="showBalanceDetails" class="q-mb-md q-mt-md">
-        <q-banner rounded class="bg-yellow-10 text-white text-center banner-wrapper">
-          <div class="row items-center justify-center justify-around">
-            <div>
-              <q-icon name="dehaze" color="white" size="25px" />
-            </div>
-            <div class="text-subtitle1">Баланс {{ balance }} {{ getCurrency }}</div>
-            <div>
-              <q-icon name="dehaze" color="white" size="25px" />
-            </div>
-          </div>
-        </q-banner>
+  <transition appear enter-active-class="animated zoomIn">
+    <q-page
+      class="flex flex-center page-wrapper"
+      :class="{ 'balance-details': !isHideCharts }"
+    >
+      <q-select v-model="currentMonth" :options="otherMonths" dense borderless />
+      <div v-if="renderChart">
+        <apexchart
+          v-if="!isChart && isHideCharts"
+          type="pie"
+          width="400"
+          :options="chartOptionsFull"
+          :series="series"
+        />
+        <apexchart
+          v-if="isChart && isHideCharts"
+          type="pie"
+          width="370"
+          :options="chartOptionsEmpty"
+          :series="series"
+        />
       </div>
-      <q-list
-        v-if="!isHideCharts && !isChart"
-        class="balance-details-wrapper"
-        separator
-        bordered
-      >
-        <q-item
-          v-for="item in budgetPlanCurrentMonth"
-          :key="item.id"
-          class="q-mr-md"
-          clickable
-          v-ripple
-          dense
-        >
-          <q-item-section class="col-1">
-            <q-icon
-              v-if="item.incomeValue !== undefined"
-              name="circle"
-              color="teal-5"
-              size="11px"
-            />
-            <q-icon
-              v-if="item.consumptionValue !== undefined"
-              name="circle"
+      <div class="column">
+        <div @click="showBalanceDetails" class="q-mb-md q-mt-md">
+          <q-banner rounded class="bg-yellow-10 text-white text-center banner-wrapper">
+            <div class="row items-center justify-center justify-around">
+              <div>
+                <q-icon name="dehaze" color="white" size="25px" />
+              </div>
+              <div class="text-subtitle1">Баланс {{ balance }} {{ getCurrency }}</div>
+              <div>
+                <q-icon name="dehaze" color="white" size="25px" />
+              </div>
+            </div>
+          </q-banner>
+        </div>
+        <transition appear enter-active-class="animated zoomIn">
+          <q-list
+            v-if="!isHideCharts && !isChart"
+            class="balance-details-wrapper"
+            separator
+            bordered
+          >
+            <q-item
+              v-for="item in budgetPlanCurrentMonth"
+              :key="item.id"
+              class="q-mr-md"
+              clickable
+              v-ripple
+              dense
+            >
+              <q-item-section class="col-1">
+                <q-icon
+                  v-if="item.incomeValue !== undefined"
+                  name="circle"
+                  color="teal-5"
+                  size="11px"
+                />
+                <q-icon
+                  v-if="item.consumptionValue !== undefined"
+                  name="circle"
+                  color="pink-13"
+                  size="11px"
+                />
+              </q-item-section>
+              <q-item-section
+                v-if="item.incomeValue !== undefined"
+                class="col-3 text-teal-5"
+              >
+                {{ item.incomeValue }} {{ getCurrency }}
+              </q-item-section>
+              <q-item-section
+                v-if="item.consumptionValue !== undefined"
+                class="col-3 text-pink-13"
+              >
+                {{ item.consumptionValue }} {{ getCurrency }}
+              </q-item-section>
+              <q-item-section
+                v-if="item.incomeValue !== undefined"
+                class="col-4 text-teal-5"
+              >
+                {{ item.incomeCategory }}
+              </q-item-section>
+              <q-item-section
+                v-if="item.consumptionValue !== undefined"
+                class="col-4 text-pink-13"
+              >
+                {{ item.consumptionCategory }}
+              </q-item-section>
+              <q-item-section
+                v-if="item.incomeValue !== undefined"
+                class="col-4 text-teal-5"
+              >
+                {{ formatDate(item.date) }}
+              </q-item-section>
+              <q-item-section
+                v-if="item.consumptionValue !== undefined"
+                class="col-4 text-pink-13"
+              >
+                {{ formatDate(item.date) }}
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </transition>
+        <div class="row">
+          <q-page-sticky position="bottom-right" :offset="[18, 18]">
+            <q-btn
+              @click="isAddConsumptionDialog = !isAddConsumptionDialog"
+              fab
+              icon="remove"
               color="pink-13"
-              size="11px"
             />
-          </q-item-section>
-          <q-item-section v-if="item.incomeValue !== undefined" class="col-3 text-teal-5">
-            {{ item.incomeValue }} {{ getCurrency }}
-          </q-item-section>
-          <q-item-section
-            v-if="item.consumptionValue !== undefined"
-            class="col-3 text-pink-13"
-          >
-            {{ item.consumptionValue }} {{ getCurrency }}
-          </q-item-section>
-          <q-item-section v-if="item.incomeValue !== undefined" class="col-4 text-teal-5">
-            {{ item.incomeCategory }}
-          </q-item-section>
-          <q-item-section
-            v-if="item.consumptionValue !== undefined"
-            class="col-4 text-pink-13"
-          >
-            {{ item.consumptionCategory }}
-          </q-item-section>
-          <q-item-section v-if="item.incomeValue !== undefined" class="col-4 text-teal-5">
-            {{ formatDate(item.date) }}
-          </q-item-section>
-          <q-item-section
-            v-if="item.consumptionValue !== undefined"
-            class="col-4 text-pink-13"
-          >
-            {{ formatDate(item.date) }}
-          </q-item-section>
-        </q-item>
-      </q-list>
-      <div class="row">
-        <q-page-sticky position="bottom-right" :offset="[18, 18]">
-          <q-btn
-            @click="isAddConsumptionDialog = !isAddConsumptionDialog"
-            fab
-            icon="remove"
-            color="pink-13"
-          />
-        </q-page-sticky>
-        <q-page-sticky position="bottom-left" :offset="[18, 18]">
-          <q-btn
-            @click="isAddIncomeDialog = !isAddIncomeDialog"
-            fab
-            icon="add"
-            color="teal-5"
-          />
-        </q-page-sticky>
+          </q-page-sticky>
+          <q-page-sticky position="bottom-left" :offset="[18, 18]">
+            <q-btn
+              @click="isAddIncomeDialog = !isAddIncomeDialog"
+              fab
+              icon="add"
+              color="teal-5"
+            />
+          </q-page-sticky>
+        </div>
       </div>
-    </div>
-    <AddIncomeDialog
-      v-model="isAddIncomeDialog"
-      :renderChart="renderChart"
-      @update:renderChart="renderChart = $event"
-    />
-    <AddConsumptionDialog
-      v-model="isAddConsumptionDialog"
-      :renderChart="renderChart"
-      @update:renderChart="renderChart = $event"
-    />
-  </q-page>
+      <AddIncomeDialog
+        v-model="isAddIncomeDialog"
+        :renderChart="renderChart"
+        @update:renderChart="renderChart = $event"
+      />
+      <AddConsumptionDialog
+        v-model="isAddConsumptionDialog"
+        :renderChart="renderChart"
+        @update:renderChart="renderChart = $event"
+      />
+    </q-page>
+  </transition>
 </template>
 
 <script>

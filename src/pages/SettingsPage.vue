@@ -1,64 +1,66 @@
 <template>
-  <div class="column q-pa-md card-wrapper">
-    <q-card flat bordered>
-      <q-card-section class="row items-center q-pb-none">
-        <router-link style="text-decoration: none; color: inherit" to="/">
-          <q-icon name="arrow_back" size="24px" color="primary" />
-        </router-link>
-        <div class="text-h6 q-px-sm">Настройки</div>
-      </q-card-section>
-      <q-card-section>
-        <q-card class="q-px-sm q-mb-md" flat bordered>
-          <q-card-section class="q-pb-none">
-            <div class="q-px-sm">Категории дохода</div>
-          </q-card-section>
-          <q-card-section class="row q-gutter-sm items-center">
-            <div v-for="{ id, title } in getIncomeCategoriesSettings" :key="id">
-              <q-chip color="primary" outline> {{ title }} </q-chip>
-            </div>
-            <q-btn
-              @click="isAddIncomeCategoryDialog = !isAddIncomeCategoryDialog"
-              outline
-              round
-              color="primary"
-              icon="add"
-            />
-          </q-card-section>
-        </q-card>
-        <q-card class="q-px-sm q-mb-md" flat bordered>
-          <q-card-section class="q-pb-none">
-            <div class="q-px-sm">Категории расхода</div>
-          </q-card-section>
-          <q-card-section class="row q-gutter-sm items-center">
-            <div v-for="{ id, title } in getСonsumptionCategoriesSettings" :key="id">
-              <q-chip color="primary" outline> {{ title }} </q-chip>
-            </div>
-            <q-btn
-              @click="isAddConsumptionCategoryDialog = !isAddConsumptionCategoryDialog"
-              outline
-              round
-              color="primary"
-              icon="add"
-            />
-          </q-card-section>
-        </q-card>
-        <q-card class="q-px-sm q-mb-md" flat bordered>
-          <q-card-section class="row q-gutter-sm items-center q-pb-sm">
-            <q-input v-model="currency" color="primary" outline label="Валюта" />
-          </q-card-section>
-          <q-card-section>
-            <q-btn
-              @click="deleteData"
-              class="q-my-sm"
-              color="red"
-              label="удалить данные"
-              rounded
-            />
-          </q-card-section>
-        </q-card>
-      </q-card-section>
-    </q-card>
-  </div>
+  <transition appear enter-active-class="animated zoomIn">
+    <div class="column q-pa-md card-wrapper">
+      <q-card flat bordered>
+        <q-card-section class="row items-center q-pb-none">
+          <router-link style="text-decoration: none; color: inherit" to="/">
+            <q-icon name="arrow_back" size="24px" color="primary" />
+          </router-link>
+          <div class="text-h6 q-px-sm">Настройки</div>
+        </q-card-section>
+        <q-card-section>
+          <q-card class="q-px-sm q-mb-md" flat bordered>
+            <q-card-section class="q-pb-none">
+              <div class="q-px-sm">Категории дохода</div>
+            </q-card-section>
+            <q-card-section class="row q-gutter-sm items-center">
+              <div v-for="{ id, title } in getIncomeCategoriesSettings" :key="id">
+                <q-chip color="primary" outline> {{ title }} </q-chip>
+              </div>
+              <q-btn
+                @click="isAddIncomeCategoryDialog = !isAddIncomeCategoryDialog"
+                outline
+                round
+                color="primary"
+                icon="add"
+              />
+            </q-card-section>
+          </q-card>
+          <q-card class="q-px-sm q-mb-md" flat bordered>
+            <q-card-section class="q-pb-none">
+              <div class="q-px-sm">Категории расхода</div>
+            </q-card-section>
+            <q-card-section class="row q-gutter-sm items-center">
+              <div v-for="{ id, title } in getСonsumptionCategoriesSettings" :key="id">
+                <q-chip color="primary" outline> {{ title }} </q-chip>
+              </div>
+              <q-btn
+                @click="isAddConsumptionCategoryDialog = !isAddConsumptionCategoryDialog"
+                outline
+                round
+                color="primary"
+                icon="add"
+              />
+            </q-card-section>
+          </q-card>
+          <q-card class="q-px-sm q-mb-md" flat bordered>
+            <q-card-section class="row q-gutter-sm items-center q-pb-sm">
+              <q-input v-model="currency" color="primary" outline label="Валюта" />
+            </q-card-section>
+            <q-card-section>
+              <q-btn
+                @click="deleteData"
+                class="q-my-sm"
+                color="red"
+                label="удалить данные"
+                rounded
+              />
+            </q-card-section>
+          </q-card>
+        </q-card-section>
+      </q-card>
+    </div>
+  </transition>
   <q-dialog v-model="isAddIncomeCategoryDialog">
     <q-card>
       <q-card-section class="q-pb-none">
