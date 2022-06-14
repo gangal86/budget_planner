@@ -4,25 +4,31 @@
       class="flex flex-center page-wrapper"
       :class="{ 'balance-details': !isHideCharts }"
     >
-      <q-select v-model="currentMonth" :options="otherMonths" dense borderless />
+      <q-select
+        class="text-subtitle1"
+        v-model="currentMonth"
+        :options="otherMonths"
+        dense
+        borderless
+      />
       <div v-if="renderChart">
         <apexchart
           v-if="!isChart && isHideCharts"
           type="pie"
-          width="400"
+          width="500"
           :options="chartOptionsFull"
           :series="series"
         />
         <apexchart
           v-if="isChart && isHideCharts"
           type="pie"
-          width="370"
+          width="450"
           :options="chartOptionsEmpty"
           :series="series"
         />
       </div>
       <div class="column">
-        <div @click="showBalanceDetails" class="q-mb-md q-mt-md">
+        <div @click="showBalanceDetails" class="q-mt-md">
           <q-banner rounded class="bg-yellow-10 text-white text-center banner-wrapper">
             <div class="row items-center justify-center justify-around">
               <div>
@@ -36,86 +42,85 @@
           </q-banner>
         </div>
         <transition appear enter-active-class="animated zoomIn">
-          <q-list
-            v-if="!isHideCharts && !isChart"
-            class="balance-details-wrapper"
-            separator
-            bordered
-          >
-            <q-item
-              v-for="item in budgetPlanCurrentMonth"
-              :key="item.id"
-              class="q-mr-md"
-              clickable
-              v-ripple
-              dense
-            >
-              <q-item-section class="col-1">
-                <q-icon
+          <div v-if="!isHideCharts && !isChart" class="q-mt-md">
+            <q-list class="balance-details-wrapper" separator bordered>
+              <q-item
+                v-for="item in budgetPlanCurrentMonth"
+                :key="item.id"
+                class="q-mr-md"
+                clickable
+                v-ripple
+                dense
+              >
+                <q-item-section class="col-1">
+                  <q-icon
+                    v-if="item.incomeValue !== undefined"
+                    name="circle"
+                    color="teal-5"
+                    size="11px"
+                  />
+                  <q-icon
+                    v-if="item.consumptionValue !== undefined"
+                    name="circle"
+                    color="pink-13"
+                    size="11px"
+                  />
+                </q-item-section>
+                <q-item-section
                   v-if="item.incomeValue !== undefined"
-                  name="circle"
-                  color="teal-5"
-                  size="11px"
-                />
-                <q-icon
+                  class="col-3 text-teal-5"
+                >
+                  {{ item.incomeValue }} {{ getCurrency }}
+                </q-item-section>
+                <q-item-section
                   v-if="item.consumptionValue !== undefined"
-                  name="circle"
-                  color="pink-13"
-                  size="11px"
-                />
-              </q-item-section>
-              <q-item-section
-                v-if="item.incomeValue !== undefined"
-                class="col-3 text-teal-5"
-              >
-                {{ item.incomeValue }} {{ getCurrency }}
-              </q-item-section>
-              <q-item-section
-                v-if="item.consumptionValue !== undefined"
-                class="col-3 text-pink-13"
-              >
-                {{ item.consumptionValue }} {{ getCurrency }}
-              </q-item-section>
-              <q-item-section
-                v-if="item.incomeValue !== undefined"
-                class="col-4 text-teal-5"
-              >
-                {{ item.incomeCategory }}
-              </q-item-section>
-              <q-item-section
-                v-if="item.consumptionValue !== undefined"
-                class="col-4 text-pink-13"
-              >
-                {{ item.consumptionCategory }}
-              </q-item-section>
-              <q-item-section
-                v-if="item.incomeValue !== undefined"
-                class="col-4 text-teal-5"
-              >
-                {{ formatDate(item.date) }}
-              </q-item-section>
-              <q-item-section
-                v-if="item.consumptionValue !== undefined"
-                class="col-4 text-pink-13"
-              >
-                {{ formatDate(item.date) }}
-              </q-item-section>
-            </q-item>
-          </q-list>
+                  class="col-3 text-pink-13"
+                >
+                  {{ item.consumptionValue }} {{ getCurrency }}
+                </q-item-section>
+                <q-item-section
+                  v-if="item.incomeValue !== undefined"
+                  class="col-4 text-teal-5"
+                >
+                  {{ item.incomeCategory }}
+                </q-item-section>
+                <q-item-section
+                  v-if="item.consumptionValue !== undefined"
+                  class="col-4 text-pink-13"
+                >
+                  {{ item.consumptionCategory }}
+                </q-item-section>
+                <q-item-section
+                  v-if="item.incomeValue !== undefined"
+                  class="col-4 text-teal-5"
+                >
+                  {{ formatDate(item.date) }}
+                </q-item-section>
+                <q-item-section
+                  v-if="item.consumptionValue !== undefined"
+                  class="col-4 text-pink-13"
+                >
+                  {{ formatDate(item.date) }}
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </div>
         </transition>
-        <div class="row">
-          <q-page-sticky position="bottom-right" :offset="[18, 18]">
+        <div class="row q-my-md">
+          <q-page-sticky position="bottom-right">
             <q-btn
               @click="isAddConsumptionDialog = !isAddConsumptionDialog"
-              fab
+              round
+              size="27px"
               icon="remove"
               color="pink-13"
             />
           </q-page-sticky>
-          <q-page-sticky position="bottom-left" :offset="[18, 18]">
+          <q-page-sticky position="bottom-left">
             <q-btn
               @click="isAddIncomeDialog = !isAddIncomeDialog"
-              fab
+              round
+              size="27px"
               icon="add"
               color="teal-5"
             />
@@ -232,10 +237,42 @@ export default {
         },
         responsive: [
           {
-            breakpoint: 270,
+            breakpoint: 340,
             options: {
               chart: {
-                width: 380,
+                width: 480,
+              },
+            },
+          },
+          {
+            breakpoint: 322,
+            options: {
+              chart: {
+                width: 460,
+              },
+            },
+          },
+          {
+            breakpoint: 310,
+            options: {
+              chart: {
+                width: 440,
+              },
+            },
+          },
+          {
+            breakpoint: 292,
+            options: {
+              chart: {
+                width: 420,
+              },
+            },
+          },
+          {
+            breakpoint: 276,
+            options: {
+              chart: {
+                width: 400,
               },
             },
           },
@@ -248,7 +285,39 @@ export default {
         colors: ['#b0bec5', '#90a4ae'],
         responsive: [
           {
-            breakpoint: 270,
+            breakpoint: 340,
+            options: {
+              chart: {
+                width: 430,
+              },
+            },
+          },
+          {
+            breakpoint: 322,
+            options: {
+              chart: {
+                width: 410,
+              },
+            },
+          },
+          {
+            breakpoint: 310,
+            options: {
+              chart: {
+                width: 390,
+              },
+            },
+          },
+          {
+            breakpoint: 292,
+            options: {
+              chart: {
+                width: 370,
+              },
+            },
+          },
+          {
+            breakpoint: 276,
             options: {
               chart: {
                 width: 350,
@@ -325,23 +394,35 @@ export default {
 
 .fixed-bottom-left {
   position: relative;
-  min-width: 150px;
-  @media (max-width: 370px) {
-    min-width: 110px;
+  min-width: 180px;
+  @media (max-width: 400px) {
+    min-width: 170px;
   }
-  @media (max-width: 290px) {
-    min-width: 90px;
+  @media (max-width: 340px) {
+    min-width: 160px;
+  }
+  @media (max-width: 320px) {
+    min-width: 150px;
+  }
+  @media (max-width: 300px) {
+    min-width: 100px;
   }
 }
 
 .fixed-bottom-right {
   position: relative;
-  min-width: 150px;
-  @media (max-width: 370px) {
-    min-width: 110px;
+  min-width: 180px;
+  @media (max-width: 400px) {
+    min-width: 170px;
   }
-  @media (max-width: 290px) {
-    min-width: 90px;
+  @media (max-width: 340px) {
+    min-width: 160px;
+  }
+  @media (max-width: 320px) {
+    min-width: 150px;
+  }
+  @media (max-width: 300px) {
+    min-width: 100px;
   }
 }
 .banner-wrapper {

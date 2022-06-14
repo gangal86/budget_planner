@@ -11,7 +11,7 @@
         <q-card-section>
           <q-card class="q-px-sm q-mb-md" flat bordered>
             <q-card-section class="q-pb-none">
-              <div class="q-px-sm">Категории дохода</div>
+              <div class="q-px-sm text-subtitle1">Категории дохода</div>
             </q-card-section>
             <q-card-section class="row q-gutter-sm items-center">
               <div v-for="{ id, title } in getIncomeCategoriesSettings" :key="id">
@@ -28,7 +28,7 @@
           </q-card>
           <q-card class="q-px-sm q-mb-md" flat bordered>
             <q-card-section class="q-pb-none">
-              <div class="q-px-sm">Категории расхода</div>
+              <div class="q-px-sm text-subtitle1">Категории расхода</div>
             </q-card-section>
             <q-card-section class="row q-gutter-sm items-center">
               <div v-for="{ id, title } in getСonsumptionCategoriesSettings" :key="id">
@@ -47,6 +47,8 @@
             <q-card-section class="row q-gutter-sm items-center q-pb-sm">
               <q-input v-model="currency" color="primary" outline label="Валюта" />
             </q-card-section>
+          </q-card>
+          <q-card class="q-px-sm q-mb-md" flat bordered>
             <q-card-section>
               <q-btn
                 @click="deleteData"
