@@ -1,6 +1,7 @@
 import { LocalStorage } from 'quasar'
 
 const currencyDefault = '$'
+const limitDays = 180
 
 const state = () => ({
   //currency: '$',
@@ -121,10 +122,16 @@ const state = () => ({
 const mutations = {
   addIncomeMutation(state, payload) {
     state.budgetPlan.push(payload)
+    const dateLimit = new Date(Date.now())
+    dateLimit.setDate(dateLimit.getDate() - limitDays)
+    state.budgetPlan = state.budgetPlan.filter((item) => item.date >= dateLimit.getTime())
     LocalStorage.set('budgetPlan', state.budgetPlan)
   },
   addСonsumptionMutation(state, payload) {
     state.budgetPlan.push(payload)
+    const dateLimit = new Date(Date.now())
+    dateLimit.setDate(dateLimit.getDate() - limitDays)
+    state.budgetPlan = state.budgetPlan.filter((item) => item.date >= dateLimit.getTime())
     LocalStorage.set('budgetPlan', state.budgetPlan)
   },
   addIncomeCategoryMutation(state, payload) {
