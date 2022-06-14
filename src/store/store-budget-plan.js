@@ -198,6 +198,9 @@ const getters = {
   getCurrency(state) {
     return state.currency
   },
+  getBudgetPlan: (state) => (monthNum) => {
+    return state.budgetPlan.filter((item) => new Date(item.date).getMonth() === monthNum)
+  },
 }
 
 export default {

@@ -23,9 +23,74 @@
     <div class="column">
       <div @click="showBalanceDetails" class="q-mb-md q-mt-md">
         <q-banner rounded class="bg-yellow-10 text-white text-center banner-wrapper">
-          Баланс {{ balance }} {{ getCurrency }}
+          <div class="row items-center justify-center justify-around">
+            <div>
+              <q-icon name="dehaze" color="white" size="25px" />
+            </div>
+            <div class="text-subtitle1">Баланс {{ balance }} {{ getCurrency }}</div>
+            <div>
+              <q-icon name="dehaze" color="white" size="25px" />
+            </div>
+          </div>
         </q-banner>
       </div>
+      <q-list
+        v-if="!isHideCharts && !isChart"
+        class="balance-details-wrapper"
+        separator
+        bordered
+      >
+        <q-item
+          v-for="item in budgetPlanCurrentMonth"
+          :key="item.id"
+          class="q-mr-md"
+          clickable
+          v-ripple
+          dense
+        >
+          <q-item-section class="col-1">
+            <q-icon
+              v-if="item.incomeValue !== undefined"
+              name="circle"
+              color="teal-5"
+              size="11px"
+            />
+            <q-icon
+              v-if="item.consumptionValue !== undefined"
+              name="circle"
+              color="pink-13"
+              size="11px"
+            />
+          </q-item-section>
+          <q-item-section v-if="item.incomeValue !== undefined" class="col-3 text-teal-5">
+            {{ item.incomeValue }} {{ getCurrency }}
+          </q-item-section>
+          <q-item-section
+            v-if="item.consumptionValue !== undefined"
+            class="col-3 text-pink-13"
+          >
+            {{ item.consumptionValue }} {{ getCurrency }}
+          </q-item-section>
+          <q-item-section v-if="item.incomeValue !== undefined" class="col-4 text-teal-5">
+            {{ item.incomeCategory }}
+          </q-item-section>
+          <q-item-section
+            v-if="item.consumptionValue !== undefined"
+            class="col-4 text-pink-13"
+          >
+            {{ item.consumptionCategory }}
+          </q-item-section>
+          <q-item-section v-if="item.incomeValue !== undefined" class="col-4 text-teal-5">
+            {{ formatDate(item.date) }}
+          </q-item-section>
+          <q-item-section
+            v-if="item.consumptionValue !== undefined"
+            class="col-4 text-pink-13"
+          >
+            {{ formatDate(item.date) }}
+          </q-item-section>
+        </q-item>
+      </q-list>
       <div class="row">
         <q-page-sticky position="bottom-right" :offset="[18, 18]">
           <q-btn
@@ -60,8 +125,51 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { date } from 'quasar'
 import AddIncomeDialog from '../components/AddIncomeDialog'
 import AddConsumptionDialog from '../components/AddConsumptionDialog'
+
+const switchMonth = function (currentMonth, monthNum = 0) {
+  switch (currentMonth) {
+    case 'Январь':
+      monthNum = 0
+      break
+    case 'Февраль':
+      monthNum = 1
+      break
+    case 'Март':
+      monthNum = 2
+      break
+    case 'Апрель':
+      monthNum = 3
+      break
+    case 'Май':
+      monthNum = 4
+      break
+    case 'Июнь':
+      monthNum = 5
+      break
+    case 'Июль':
+      monthNum = 6
+      break
+    case 'Август':
+      monthNum = 7
+      break
+    case 'Сентябрь':
+      monthNum = 8
+      break
+    case 'Октябрь':
+      monthNum = 9
+      break
+    case 'Ноябрь':
+      monthNum = 10
+      break
+    case 'Декабрь':
+      monthNum = 11
+      break
+  }
+  return monthNum
+}
 
 export default {
   name: 'MainPage',
@@ -143,47 +251,14 @@ export default {
       'getIncomeSum',
       'getConsumptionSum',
       'getCurrency',
+      'getBudgetPlan',
     ]),
+    budgetPlanCurrentMonth() {
+      let monthNum = switchMonth(this.currentMonth)
+      return this.getBudgetPlan(monthNum)
+    },
     series() {
-      let monthNum = 0
-      switch (this.currentMonth) {
-        case 'Январь':
-          monthNum = 0
-          break
-        case 'Февраль':
-          monthNum = 1
-          break
-        case 'Март':
-          monthNum = 2
-          break
-        case 'Апрель':
-          monthNum = 3
-          break
-        case 'Май':
-          monthNum = 4
-          break
-        case 'Июнь':
-          monthNum = 5
-          break
-        case 'Июль':
-          monthNum = 6
-          break
-        case 'Август':
-          monthNum = 7
-          break
-        case 'Сентябрь':
-          monthNum = 8
-          break
-        case 'Октябрь':
-          monthNum = 9
-          break
-        case 'Ноябрь':
-          monthNum = 10
-          break
-        case 'Декабрь':
-          monthNum = 11
-          break
-      }
+      let monthNum = switchMonth(this.currentMonth)
       let income = this.getIncomeSum(monthNum)
       let consumption = this.getConsumptionSum(monthNum)
       if (income === 0 && consumption === 0) {
@@ -213,6 +288,9 @@ export default {
   methods: {
     showBalanceDetails() {
       this.isHideCharts = !this.isHideCharts
+    },
+    formatDate(timeStamp) {
+      return date.formatDate(timeStamp, 'DD.MM.YYYY')
     },
   },
 }
@@ -254,14 +332,21 @@ export default {
   }
 }
 .banner-wrapper {
-  max-width: 200px;
-  margin: 0 auto;
+  max-width: 250px;
   width: 100%;
+  margin: 0 auto;
 }
 .q-select {
   max-width: 80px;
   width: 100%;
   margin: 0 auto;
   padding-top: 10px;
+}
+.balance-details-wrapper {
+  max-width: 250px;
+  width: 100%;
+  margin: 0 auto;
+  font-size: 11px;
+  word-break: break-all;
 }
 </style>
